@@ -70,19 +70,37 @@ npm install
 
 **O que isso faz?** Baixa todas as bibliotecas que o projeto precisa (React, Tailwind, Recharts, etc). Pode levar 1-2 minutos.
 
-### 3️⃣ Configurar Supabase
-Crie um arquivo `.env.local` na raiz do projeto:
+### 3️⃣ Configurar Variáveis de Ambiente
+
+#### Método Rápido:
+1. Copie o arquivo de exemplo:
+```bash
+cp .env.example .env.local
+```
+
+2. Edite `.env.local` e adicione suas credenciais Supabase
+
+#### Método Manual:
+1. Crie um arquivo `.env.local` na raiz do projeto
+2. Adicione as seguintes variáveis:
 
 ```env
 VITE_SUPABASE_URL=sua_url_supabase_aqui
 VITE_SUPABASE_ANON_KEY=sua_chave_anon_aqui
 ```
 
-**Como obter essas credenciais:**
-1. Entre no [Supabase](https://supabase.com)
-2. Acesse seu projeto
-3. Vá para **Settings → API**
-4. Copie `Project URL` e `anon public key`
+#### 🔑 Como obter as credenciais:
+1. Acesse [https://app.supabase.com](https://app.supabase.com)
+2. Selecione seu projeto
+3. Vá para **Settings → API** (no menu lateral)
+4. Copie:
+   - **Project URL** → Cole como `VITE_SUPABASE_URL`
+   - **anon public key** → Cole como `VITE_SUPABASE_ANON_KEY`
+
+#### ⚠️ Importante:
+- O arquivo `.env.local` **nunca é enviado ao GitHub** (está no `.gitignore`)
+- Cada pessoa que clonar o projeto precisa criar seu próprio `.env.local`
+- Nunca compartilhe seu `.env.local` com ninguém!
 
 ### 4️⃣ Rodar o Servidor de Desenvolvimento
 ```bash
@@ -189,6 +207,41 @@ npm run preview
 # Verificar código com linter
 npm run lint
 ```
+
+---
+
+## 🔐 Variáveis de Ambiente e Segurança
+
+### Por que usar variáveis de ambiente?
+Credenciais (chaves, URLs, senhas) **nunca devem estar no código**. Por isso usamos `.env.local`:
+
+| Arquivo | Descrição | Enviado ao GitHub? |
+|---------|-----------|-------------------|
+| `.env.example` | Modelo vazio (sem valores reais) | ✅ Sim |
+| `.env.local` | Suas credenciais reais | ❌ **Não** (ignorado) |
+
+### Estrutura de Variáveis
+
+```env
+# Desenvolvimento (.env.local)
+VITE_SUPABASE_URL=https://sua-url.supabase.co
+VITE_SUPABASE_ANON_KEY=sua_chave_aqui
+
+# Produção (Vercel/Netlify)
+# Configure no painel do serviço de deploy
+```
+
+### ✅ Boas Práticas
+- ✅ Sempre use `.env.local` em desenvolvimento
+- ✅ Nunca compartilhe seu `.env.local`
+- ✅ Configure variáveis de ambiente no serviço de deploy
+- ✅ Use chaves **anon** (públicas) no frontend
+- ✅ Use chaves **service_role** apenas no backend (não neste projeto)
+
+### ⚠️ Segurança
+- A chave `VITE_SUPABASE_ANON_KEY` é **pública** (está no código do navegador)
+- Isso é seguro! O Supabase protege os dados com RLS (Row Level Security)
+- Usuários só podem ver/editar seus próprios dados
 
 ---
 
