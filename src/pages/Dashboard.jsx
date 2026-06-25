@@ -192,27 +192,27 @@ export default function Dashboard({ session }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-blue-600 text-white p-6 shadow-lg">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">Glicemia</h1>
-            <p className="text-blue-100 text-sm mt-1">{session.user.email}</p>
+      <div className="bg-blue-600 text-white p-4 md:p-6 shadow-lg">
+        <div className="max-w-6xl mx-auto flex justify-between items-center gap-4">
+          <div className="min-w-0">
+            <h1 className="text-2xl md:text-3xl font-bold">Glicemia</h1>
+            <p className="text-blue-100 text-xs md:text-sm mt-1 truncate">{session.user.email}</p>
           </div>
           <button
             onClick={() => supabase.auth.signOut()}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 md:px-4 rounded text-sm md:text-base whitespace-nowrap"
           >
             Sair
           </button>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto p-4 md:p-6">
         {/* Abas */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-6 overflow-x-auto">
           <button
             onClick={() => setActiveTab('historico')}
-            className={`px-6 py-2 rounded-lg font-bold transition ${
+            className={`px-4 md:px-6 py-2 rounded-lg font-bold transition whitespace-nowrap text-sm md:text-base ${
               activeTab === 'historico'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
@@ -222,7 +222,7 @@ export default function Dashboard({ session }) {
           </button>
           <button
             onClick={() => setActiveTab('analises')}
-            className={`px-6 py-2 rounded-lg font-bold transition ${
+            className={`px-4 md:px-6 py-2 rounded-lg font-bold transition whitespace-nowrap text-sm md:text-base ${
               activeTab === 'analises'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
@@ -234,18 +234,18 @@ export default function Dashboard({ session }) {
 
         {/* Botões de Ação */}
         {activeTab === 'historico' && (
-          <div className="mb-6 flex gap-3">
+          <div className="mb-6 flex flex-col sm:flex-row gap-3">
             {userRole === 'paciente' && (
               <button
                 onClick={() => handleCancelEdit()}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg"
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 md:px-6 rounded-lg text-sm md:text-base"
               >
                 {showForm ? 'Cancelar' : '+ Novo Registro'}
               </button>
             )}
             <button
               onClick={() => exportarPDF(registros, 'Meu Acompanhamento')}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg flex items-center gap-2"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 md:px-6 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
             >
               📥 Exportar PDF
             </button>
@@ -257,9 +257,9 @@ export default function Dashboard({ session }) {
           <>
         {/* Formulário */}
         {showForm && userRole === 'paciente' && (
-          <div className="bg-white p-6 rounded-lg shadow mb-6">
-            <h2 className="text-xl font-bold mb-4">{editingId ? 'Editar Registro' : 'Novo Registro'}</h2>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white p-4 md:p-6 rounded-lg shadow mb-6">
+            <h2 className="text-lg md:text-xl font-bold mb-4">{editingId ? 'Editar Registro' : 'Novo Registro'}</h2>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Glicemia (mg/dL)*</label>
                 <input
@@ -345,9 +345,9 @@ export default function Dashboard({ session }) {
 
         {/* Gráfico */}
         {chartData.length > 0 && (
-          <div className="bg-white p-6 rounded-lg shadow mb-6">
-            <h2 className="text-xl font-bold mb-4">Histórico de Glicemia</h2>
-            <ResponsiveContainer width="100%" height={300}>
+          <div className="bg-white p-4 md:p-6 rounded-lg shadow mb-6">
+            <h2 className="text-lg md:text-xl font-bold mb-4">Histórico de Glicemia</h2>
+            <ResponsiveContainer width="100%" height={250}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" />
@@ -361,9 +361,9 @@ export default function Dashboard({ session }) {
         )}
 
         {/* Lista de Registros */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold">Últimos Registros</h2>
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="p-4 md:p-6 border-b border-gray-200">
+            <h2 className="text-lg md:text-xl font-bold">Últimos Registros</h2>
           </div>
           {loading ? (
             <div className="p-6 text-center text-gray-500">Carregando...</div>
@@ -371,40 +371,42 @@ export default function Dashboard({ session }) {
             <div className="p-6 text-center text-gray-500">Nenhum registro ainda</div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full text-sm md:text-base">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Data/Hora</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Glicemia</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Medicação</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Refeição</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Exercício</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Sintomas</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">Ações</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-900">Data/Hora</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-900">Glicemia</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-900">Medicação</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-900">Refeição</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-900">Exercício</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-900">Sintomas</th>
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-900">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {registros.map((reg) => (
                     <tr key={reg.id} className="border-t border-gray-200 hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm">{formatarDataHora(reg.data, reg.hora)}</td>
-                      <td className="px-6 py-4 text-sm font-bold text-blue-600">{reg.glicemia} mg/dL</td>
-                      <td className="px-6 py-4 text-sm">{reg.medicacao_tipo} {reg.medicacao_dose ? `(${reg.medicacao_dose}UI)` : ''}</td>
-                      <td className="px-6 py-4 text-sm">{reg.refeicao_descricao || '-'}</td>
-                      <td className="px-6 py-4 text-sm">{reg.exercicio_tipo} {reg.exercicio_duracao ? `(${reg.exercicio_duracao}min)` : ''}</td>
-                      <td className="px-6 py-4 text-sm">{reg.sintomas || '-'}</td>
-                      <td className="px-6 py-4 text-sm flex gap-2">
-                        <button
-                          onClick={() => handleEdit(reg)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded text-xs"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDelete(reg.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs"
-                        >
-                          Deletar
-                        </button>
+                      <td className="px-3 md:px-6 py-2 md:py-4">{formatarDataHora(reg.data, reg.hora)}</td>
+                      <td className="px-3 md:px-6 py-2 md:py-4 font-bold text-blue-600">{reg.glicemia} mg/dL</td>
+                      <td className="px-3 md:px-6 py-2 md:py-4">{reg.medicacao_tipo} {reg.medicacao_dose ? `(${reg.medicacao_dose}UI)` : ''}</td>
+                      <td className="px-3 md:px-6 py-2 md:py-4">{reg.refeicao_descricao || '-'}</td>
+                      <td className="px-3 md:px-6 py-2 md:py-4">{reg.exercicio_tipo} {reg.exercicio_duracao ? `(${reg.exercicio_duracao}min)` : ''}</td>
+                      <td className="px-3 md:px-6 py-2 md:py-4">{reg.sintomas || '-'}</td>
+                      <td className="px-3 md:px-6 py-2 md:py-4">
+                        <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                          <button
+                            onClick={() => handleEdit(reg)}
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 md:px-3 rounded text-xs"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => handleDelete(reg.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 md:px-3 rounded text-xs"
+                          >
+                            Deletar
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
